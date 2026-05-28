@@ -1,3 +1,4 @@
+//function for printing out bitboards
 pub fn print_bitboard(bitboard: u64) {
     const LAST_BIT: u64 = 63;
     for rank in 0..8 {
@@ -10,14 +11,32 @@ pub fn print_bitboard(bitboard: u64) {
     }
 }
 
+//struct to represent board
 pub struct Board {
     pub wpieces: [u64; 6],
-     pub bpieces: [u64; 6],
+    pub bpieces: [u64; 6],
 //    turn: bool,
 //    epSquare: u64,
 //    castling: u8,
 }
+impl Board{
+    pub fn concat_wpieces(&self) -> u64 {
+        let wpiecesbb = self.wpieces.iter().fold(0, |acc, &x| acc ^ x);
+        wpiecesbb
+    }
+    pub fn concat_bpieces(&self) -> u64 {
+        let bpiecesbb = self.bpieces.iter().fold(0, |acc, &x| acc ^ x);
+        bpiecesbb
+    }
+    pub fn concat_apieces(&self) -> u64 {
+        let wpiecesbb = self.wpieces.iter().fold(0, |acc, &x| acc ^ x);
+        let bpiecesbb = self.bpieces.iter().fold(0, |acc, &x| acc ^ x);
+        let apiecesbb = wpiecesbb ^ bpiecesbb;
+        apiecesbb
+    }
+}
 
+//struct to assign number to each type to make indexing array of pieces easier to read
 pub struct Pieces;
 impl Pieces {
     pub const KING: usize = 0;
@@ -28,3 +47,6 @@ impl Pieces {
     pub const PAWN: usize = 5;
     pub const NONE: usize = 6;
 }
+
+//lookup tables for each piece
+
