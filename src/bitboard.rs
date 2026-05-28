@@ -1,3 +1,7 @@
+//bitboards for afile and hfile
+pub const bbafile: u64 = 72340172838076673;
+pub const bbhfile: u64 = 9259542123273814144;
+
 //function for printing out bitboards
 pub fn print_bitboard(bitboard: u64) {
     const LAST_BIT: u64 = 63;
@@ -19,6 +23,8 @@ pub struct Board {
 //    epSquare: u64,
 //    castling: u8,
 }
+
+// functions to create bitboards for all the pieces
 impl Board{
     pub fn concat_wpieces(&self) -> u64 {
         let wpiecesbb = self.wpieces.iter().fold(0, |acc, &x| acc ^ x);
@@ -49,4 +55,3 @@ impl Pieces {
 }
 
 //lookup tables for each piece
-

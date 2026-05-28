@@ -14,5 +14,7 @@ fn main() {
     bitboard::print_bitboard(wpiecesbb);
     println!();
     bitboard::print_bitboard(apiecesbb);
+    println!();
+    bitboard::print_bitboard(9259542123273814144);
 
 }
