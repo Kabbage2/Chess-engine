@@ -10,11 +10,11 @@ fn main() {
     let bpiecesbb = mn_board.concat_bpieces();
     let apiecesbb = mn_board.concat_apieces();
 
-    bitboard::print_bitboard(bpiecesbb);
+    bitboard::print_bitboard(movegenerator::notabfile);
     println!();
-    bitboard::print_bitboard(wpiecesbb);
+    bitboard::print_bitboard(mn_board.wpieces[bitboard::Pieces::KNIGHT]);
     println!();
-    bitboard::print_bitboard(apiecesbb);
-    println!();
-    bitboard::print_bitboard(movegenerator::kingmoves(mn_board.wpieces[bitboard::Pieces::KING], wpiecesbb));
+    //bitboard::print_bitboard(movegenerator::kingmoves(mn_board.wpieces[bitboard::Pieces::KING], wpiecesbb));
+    //println!();
+    bitboard::print_bitboard(movegenerator::knightmoves(mn_board.wpieces[bitboard::Pieces::KNIGHT], wpiecesbb));
 }
