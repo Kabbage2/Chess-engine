@@ -1,4 +1,5 @@
 mod bitboard;
+mod movegenerator;
 
 fn main() {
     let mn_board = bitboard::Board {
@@ -15,6 +16,5 @@ fn main() {
     println!();
     bitboard::print_bitboard(apiecesbb);
     println!();
-    bitboard::print_bitboard(9259542123273814144);
-
+    bitboard::print_bitboard(movegenerator::kingmoves(mn_board.wpieces[bitboard::Pieces::KING], wpiecesbb));
 }

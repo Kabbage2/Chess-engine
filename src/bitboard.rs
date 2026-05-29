@@ -1,7 +1,3 @@
-//bitboards for afile and hfile
-pub const bbafile: u64 = 72340172838076673;
-pub const bbhfile: u64 = 9259542123273814144;
-
 //function for printing out bitboards
 pub fn print_bitboard(bitboard: u64) {
     const LAST_BIT: u64 = 63;
@@ -53,5 +49,3 @@ impl Pieces {
     pub const PAWN: usize = 5;
     pub const NONE: usize = 6;
 }
-
-//lookup tables for each piece
