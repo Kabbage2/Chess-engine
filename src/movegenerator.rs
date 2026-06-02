@@ -31,7 +31,7 @@ pub fn kingmoves(kingpos: u64, ownside: u64) -> u64 {
 }
 
 pub fn knightmoves(knpos: u64, ownside: u64) -> u64 {
-    let knpos_clip_fileab = knpos & notabfile;
+    let knpos_clip_fileab = knpos & &notabfile;
     let knpos_clip_filegh = knpos & &notghfile;
     let knpos_clip_filea = knpos & &notafile;
     let knpos_clip_fileh = knpos & &nothfile;
@@ -49,4 +49,17 @@ pub fn knightmoves(knpos: u64, ownside: u64) -> u64 {
     let knight_valid = posmov & !ownside;
     
     knight_valid
+}
+
+pub fn wpawnmv (pawnpos: u64, bpieces: u64) -> u64 {
+    let mask_rank_3: u64 = 16711680
+    let wpawn_one_step: u64 = pawnpos << 8;
+    let wpawn_two_step: u64 = (wpawn_one_step & mask_rank_3) << 8;
+    let wpawn_valid = wpawn_one_step | wpawn_two_step; 
+    let wpawn_left_attack = (pawnpos & &notafile) << 7;
+    let wpawn_right_attack = (pawnpos & &nothfile) >> 7;
+    let wpawn_attacks = wpawn_left_attack | wpawn_right_attack;
+    let wpawn_valid_attacks = wpawn_attacks & bpieces;
+    let wpawn_valid = wpawn_valid | wpawn_valid_attacks;
+    wpawn_valid
 }
