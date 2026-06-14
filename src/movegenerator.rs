@@ -52,7 +52,7 @@ pub fn knightmoves(knpos: u64, ownside: u64) -> u64 {
 }
 
 pub fn wpawnmv (pawnpos: u64, bpieces: u64) -> u64 {
-    let mask_rank_3: u64 = 16711680
+    let mask_rank_3: u64 = 16711680;
     let wpawn_one_step: u64 = pawnpos << 8;
     let wpawn_two_step: u64 = (wpawn_one_step & mask_rank_3) << 8;
     let wpawn_valid = wpawn_one_step | wpawn_two_step; 
@@ -64,12 +64,15 @@ pub fn wpawnmv (pawnpos: u64, bpieces: u64) -> u64 {
     wpawn_valid
 }
 
-pub fn check_mbitboard(mag_num: u64, shift: u64, og_bb: u64, new_bb: u64) -> bool {
-    new_bb = new_bb << shift;
-    new_bb = new_bb / mag_num;
-    if(new_bb == og_bb) {
-        True;
-    } else {
-        False;
-    }
+pub fn bpawnmv (pawnpos: u64, wpieces: u64) -> u64 {
+    let mask_rank_7: u64 = 71776119061217280;
+    let bpawn_one_step: u64 = pawnpos >> 8;
+    let bpawn_two_step: u64 = (bpawn_one_step & mask_rank_7) >> 8;
+    let bpawn_valid = bpawn_one_step | bpawn_two_step;
+    let bpawn_left_attack = (pawnpos & &notafile) >> 7;
+    let bpawn_right_attack = (pawnpos & &nothfile) << 7;
+    let bpawn_attacks = bpawn_left_attack | bpawn_right_attack;
+    let bpawn_valid_attacks = bpawn_attacks & wpieces;
+    let bpawn_valid = bpawn_valid | bpawn_valid_attacks;
+    bpawn_valid
 }
