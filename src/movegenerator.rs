@@ -3,6 +3,10 @@ pub const bbafile: u64 = 72340172838076673;
 pub const bbhfile: u64 = 9259542123273814144;
 pub const bbgfile: u64 = 4629771061636907072;
 pub const bbbfile: u64 = 144680345676153346;
+pub const 8rank: u64 = 18374686479671623680;
+pub const 1rank: u64 = 255;
+pub const !1rank: u64 = !1rank;
+pub const not8rank: u64 = !8rank;
 pub const notafile: u64 = !bbafile;
 pub const nothfile: u64 = !bbhfile;
 pub const bbabfile: u64 = bbafile | bbbfile;
@@ -75,4 +79,41 @@ pub fn bpawnmv (pawnpos: u64, wpieces: u64) -> u64 {
     let bpawn_valid_attacks = bpawn_attacks & wpieces;
     let bpawn_valid = bpawn_valid | bpawn_valid_attacks;
     bpawn_valid
+}
+
+pub fn wrookmv (rookpos: u64, apieces: u64) -> u64 {
+    let upmv u64;
+    while (rookpos & &not8rank)  != 0 {
+        if (rookpos >> 8) + apieces == (rookpos >> 8) ^ apieces {
+            let upmv = upmv | (rookpos >> 8);
+        } else {
+            break;
+        }
+    }
+    let dwnmv u64;
+    while (rookpos & &not1rank) != 0 {
+        if (rookpos << 8) + apieces == (rookpos << 8) ^ apieces {
+            let downmv = downmv | (rookpos << 8);
+        } else {
+            break;
+        }
+    }
+    let rtmv u64;
+    while (rookpos & &nothfile) != 0 {
+        if (rookpos > 1) + apieces == (rookpos > 1) ^ apieces {
+            let rtmv  = rtmv | (rookpos > 1); 
+        } else {
+            break;
+        }
+    }
+    let lftmv u64;
+    while (rookpos & &notafile) != 0 {
+        if (rookpos < 1) + apieces == (rookpos < 1) ^ apieces {
+            let lftmv = lftmv | (rookpos < 1);
+        } else {
+            break;
+        }
+    }
+    let posmov u64 = upmv | dwnmv | rtmv | lftmv;
+    posmov
 }
