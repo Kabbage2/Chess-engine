@@ -63,3 +63,13 @@ pub fn wpawnmv (pawnpos: u64, bpieces: u64) -> u64 {
     let wpawn_valid = wpawn_valid | wpawn_valid_attacks;
     wpawn_valid
 }
+
+pub fn check_mbitboard(mag_num: u64, shift: u64, og_bb: u64, new_bb: u64) -> bool {
+    new_bb = new_bb << shift;
+    new_bb = new_bb / mag_num;
+    if(new_bb == og_bb) {
+        True;
+    } else {
+        False;
+    }
+}
