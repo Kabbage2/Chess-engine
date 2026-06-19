@@ -17,6 +17,7 @@ pub const notdlborder: u64 = not1rank & notafile;
 pub const notdrborder: u64 = not1rank & nothfile;
 pub const noturborder: u64 = not8rank & nothfile;
 pub const notulborder: u64 = not1rank & nothfile;
+let mvs_since_kngmv: u64 = 0;
 
 pub fn kingmoves(kingpos: u64, ownside: u64) -> u64 {
     let kingpos_clip_file_h = kingpos & &nothfile;
@@ -59,7 +60,7 @@ pub fn knightmoves(knpos: u64, ownside: u64) -> u64 {
     knight_valid
 }
 
-pub fn wpawnmv(pawnpos: u64, bpieces: u64) -> u64 {
+pub fn wpawnmv(pawnpos: u64, bpieces: u64, ownside: u64) -> u64 {
     let mask_rank_3: u64 = 16711680;
     let wpawn_one_step: u64 = pawnpos << 8;
     let wpawn_two_step: u64 = (wpawn_one_step & mask_rank_3) << 8;
@@ -69,10 +70,11 @@ pub fn wpawnmv(pawnpos: u64, bpieces: u64) -> u64 {
     let wpawn_attacks = wpawn_left_attack | wpawn_right_attack;
     let wpawn_valid_attacks = wpawn_attacks & bpieces;
     let wpawn_valid = wpawn_valid | wpawn_valid_attacks;
+    let wpawn_valid = wpawn_valid & !ownside;
     wpawn_valid
 }
 
-pub fn bpawnmv(pawnpos: u64, wpieces: u64) -> u64 {
+pub fn bpawnmv(pawnpos: u64, wpieces: u64, ownside: u64) -> u64 {
     let mask_rank_7: u64 = 71776119061217280;
     let bpawn_one_step: u64 = pawnpos >> 8;
     let bpawn_two_step: u64 = (bpawn_one_step & mask_rank_7) >> 8;
@@ -82,6 +84,7 @@ pub fn bpawnmv(pawnpos: u64, wpieces: u64) -> u64 {
     let bpawn_attacks = bpawn_left_attack | bpawn_right_attack;
     let bpawn_valid_attacks = bpawn_attacks & wpieces;
     let bpawn_valid = bpawn_valid | bpawn_valid_attacks;
+    let bpawn_valid = bpawn_valid & !ownside;
     bpawn_valid
 }
 
@@ -185,7 +188,7 @@ pub fn queenmv(qnpos: u64, apieces: u64) -> u64{
     posmov
 }
 
-pub fn make_move(piece_type: str, bb: u64, pos_mov: u64, castling_rights: u8, side: bool) -> u64{
+pub fn make_move(piece_type: str, bb: u64, pos_mov: u64, castling_rights: u8, side: bool) -> u64, u8 {
     if piece_type == "king" & side == true{
         castling_rights = 0b00111111 & castling_rights;
         let bb = bb ^ pos_mov;
@@ -208,5 +211,10 @@ pub fn make_move(piece_type: str, bb: u64, pos_mov: u64, castling_rights: u8, si
         bb = bb ^ pos_mov;
     }
 
-    bb
+    bb, castling_rights
+}
+
+pub fn unmake_move(prev_bb:u64, curr_bb: u64, prev_castling_rights: u8) -> u64, u8 {
+    let bb = prev_bb & curr_bb;
+    bb, prev_castling_rights
 }
