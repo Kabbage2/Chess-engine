@@ -17,7 +17,7 @@ pub struct Board {
     pub bpieces: [u64; 6],
 //    turn: bool,
 //    epSquare: u64,
-//    castling: u8,
+    pub castling: u8,
 }
 
 // functions to create bitboards for all the pieces

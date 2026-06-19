@@ -174,4 +174,13 @@ pub fn bishmv(bishpos: u64, apieces: u64) -> {
         }
     }
 
+    let posmov: u64 = ur | ul | dr | dl;
+    posmov
+}
+
+pub fn queenmv(qnpos: u64, apieces: u64) -> {
+    let straights: u64 = rookmv(&qnpos);
+    let diags: u64 = bishmv(&qnpos);
+    let posmov: u64 = rookmv | bishmv;
+    posmov
 }
