@@ -12,3 +12,5 @@ fn main() {
 
     bitboard::print_bitboard(movegenerator::bpawnmv(mn_board.bpieces[bitboard::Pieces::PAWN], wpiecesbb));
 }
+
+fn black_castling()

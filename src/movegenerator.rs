@@ -185,20 +185,26 @@ pub fn queenmv(qnpos: u64, apieces: u64) -> u64{
     posmov
 }
 
-pub fn make_move(piece_type: str, bb: u64, pos_mov: u64, ) -> u64{
-    let mut kcastling_rights = true;
-    let mut qcastling_rights = true;
-    let mut castlin_rights = true;
-    if piece_type == "king" {
-        castlin_rights = false;
+pub fn make_move(piece_type: str, bb: u64, pos_mov: u64, castling_rights: u8, side: bool) -> u64{
+    if piece_type == "king" & side == true{
+        castling_rights = 0b00111111 & castling_rights;
         let bb = bb ^ pos_mov;
-    } else if piece_type = "queen_rook"{
-        qcastling_rights = false;
+    }else if piece_type == "king" & side == false{
+        castling_rights = 0b11111100 & castling_rights;
         let bb = bb ^ pos_mov;
-    } else if piece_type = "king_rook" {
-        kcastling_rights = false;
+    } else if piece_type == "queen_rook" & side == true {
+        castling_rights = 0b01111111 & castling_rights;
         let bb = bb ^ pos_mov;
-    } else {
+    } else if piece_type == "queen_rook" & side == false{
+        castling_rights = 0b11111101 & castling_rights;
+        let bb = bb ^ pos_mov;
+    }else if piece_type == "king_rook" & side == true {
+        castling_rights = 0b10111111; & castling_rights;
+        let bb = bb ^ pos_mov;
+    } else if piece_type == "king_rook" & side == false {
+        castling_rights = 0b11111110 & castling_rights;
+        let bb = bb ^ pos_mov;
+    }else {
         bb = bb ^ pos_mov;
     }
 
