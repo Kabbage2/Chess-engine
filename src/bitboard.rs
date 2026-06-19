@@ -15,6 +15,7 @@ pub fn print_bitboard(bitboard: u64) {
 pub struct Board {
     pub wpieces: [u64; 6],
     pub bpieces: [u64; 6],
+    pub side: bool,
 //    turn: bool,
 //    epSquare: u64,
     pub castling: u8,
@@ -43,10 +44,9 @@ pub struct Pieces;
 impl Pieces {
     pub const KING: usize = 0;
     pub const QUEEN: usize = 1;
-    pub const ROOK1: usize = 2;
-    pub const ROOK2: usize = 3;
-    pub const BISHOP: usize = 4;
-    pub const KNIGHT: usize = 5;
-    pub const PAWN: usize = 6;
-    pub const NONE: usize = 7;
+    pub const ROOK: usize = 2;
+    pub const BISHOP: usize = 3;
+    pub const KNIGHT: usize = 4;
+    pub const PAWN: usize = 5;
+    pub const NONE: usize = 6;
 }

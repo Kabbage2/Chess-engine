@@ -59,7 +59,7 @@ pub fn knightmoves(knpos: u64, ownside: u64) -> u64 {
     knight_valid
 }
 
-pub fn wpawnmv (pawnpos: u64, bpieces: u64) -> u64 {
+pub fn wpawnmv(pawnpos: u64, bpieces: u64) -> u64 {
     let mask_rank_3: u64 = 16711680;
     let wpawn_one_step: u64 = pawnpos << 8;
     let wpawn_two_step: u64 = (wpawn_one_step & mask_rank_3) << 8;
@@ -72,7 +72,7 @@ pub fn wpawnmv (pawnpos: u64, bpieces: u64) -> u64 {
     wpawn_valid
 }
 
-pub fn bpawnmv (pawnpos: u64, wpieces: u64) -> u64 {
+pub fn bpawnmv(pawnpos: u64, wpieces: u64) -> u64 {
     let mask_rank_7: u64 = 71776119061217280;
     let bpawn_one_step: u64 = pawnpos >> 8;
     let bpawn_two_step: u64 = (bpawn_one_step & mask_rank_7) >> 8;
@@ -85,7 +85,7 @@ pub fn bpawnmv (pawnpos: u64, wpieces: u64) -> u64 {
     bpawn_valid
 }
 
-pub fn rookmv (rookpos: u64, apieces: u64) -> u64 {
+pub fn rookmv(rookpos: u64, apieces: u64) -> u64 {
     let upmv: u64 = 0;
     let rookshift: u64 = rookpos;
     while (rookshift & &not8rank)  != 0 {
@@ -130,7 +130,7 @@ pub fn rookmv (rookpos: u64, apieces: u64) -> u64 {
     posmov
 }
 
-pub fn bishmv(bishpos: u64, apieces: u64) -> {
+pub fn bishmv(bishpos: u64, apieces: u64) -> u64{
     let ur: u64 = 0;
     let bishshift: u64 = bishpos;
     while (bishshift & &noturborder) != 0{
@@ -178,9 +178,33 @@ pub fn bishmv(bishpos: u64, apieces: u64) -> {
     posmov
 }
 
-pub fn queenmv(qnpos: u64, apieces: u64) -> {
-    let straights: u64 = rookmv(&qnpos);
-    let diags: u64 = bishmv(&qnpos);
+pub fn queenmv(qnpos: u64, apieces: u64) -> u64{
+    let straights: u64 = rookmv(&qnpos, &apieces);
+    let diags: u64 = bishmv(&qnpos, &apieces);
     let posmov: u64 = rookmv | bishmv;
     posmov
+}
+
+pub fn in_check(fut_pos: u64, cur_pos: u64) -> bool {
+
+}
+
+pub fn make_move(piece_type: str, bb: u64, pos_mov: u64, ) -> u64{
+    let mut kcastling_rights = true;
+    let mut qcastling_rights = true;
+    let mut castlin_rights = true;
+    if piece_type == "king" {
+        castlin_rights = false;
+        let bb = bb ^ pos_mov;
+    } else if piece_type = "queen_rook"{
+        qcastling_rights = false;
+        let bb = bb ^ pos_mov;
+    } else if piece_type = "king_rook" {
+        kcastling_rights = false;
+        let bb = bb ^ pos_mov;
+    } else {
+        bb = bb ^ pos_mov;
+    }
+
+    bb
 }
