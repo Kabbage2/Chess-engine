@@ -13,6 +13,8 @@ pub const bbabfile: u64 = bbafile | bbbfile;
 pub const bbghfile: u64 = bbgfile | bbhfile;
 pub const notabfile: u64 = !bbabfile;
 pub const notghfile: u64 = !bbghfile;
+pub const border: u64 = 1rank | 8rank | bbabfile | bbhfile;
+pub const notborder: u64 = !border;
 
 pub fn kingmoves(kingpos: u64, ownside: u64) -> u64 {
     let kingpos_clip_file_h = kingpos & &nothfile;
@@ -82,38 +84,51 @@ pub fn bpawnmv (pawnpos: u64, wpieces: u64) -> u64 {
 }
 
 pub fn rookmv (rookpos: u64, apieces: u64) -> u64 {
-    let upmv u64;
-    while (rookpos & &not8rank)  != 0 {
-        if (rookpos << 8) + apieces == (rookpos << 8) ^ apieces {
-            let upmv = upmv | (rookpos << 8);
+    let upmv: u64;
+    let rookshift: u64 = rookpos;
+    while (rookshift & &not8rank)  != 0 {
+        if (rookshift << 8) + apieces == (rookshift << 8) ^ apieces {
+            let upmv = upmv | (rookshift << 8);
+            let rookshift = rookshift << 8;
         } else {
             break;
         }
     }
-    let dwnmv u64;
-    while (rookpos & &not1rank) != 0 {
-        if (rookpos >> 8) + apieces == (rookpos >> 8) ^ apieces {
-            let downmv = downmv | (rookpos >> 8);
+    let dwnmv: u64;
+    let rookshift: u64 = rookpos;
+    while (rookshift & &not1rank) != 0 {
+        if (rookshift >> 8) + apieces == (rookshift >> 8) ^ apieces {
+            let downmv = downmv | (rookshift >> 8);
+            let rookshift = rookshift >> 8;
         } else {
             break;
         }
     }
     let rtmv u64;
-    while (rookpos & &nothfile) != 0 {
-        if (rookpos < 1) + apieces == (rookpos < 1) ^ apieces {
-            let rtmv  = rtmv | (rookpos < 1); 
+    let rookshift: u64 = rookpos;
+    while (rookshift & &nothfile) != 0 {
+        if (rookshift < 1) + apieces == (rookshift < 1) ^ apieces {
+            let rtmv  = rtmv | (rookshift < 1); 
+            let rookshift = rookshift < 1;
         } else {
             break;
         }
     }
-    let lftmv u64;
-    while (rookpos & &notafile) != 0 {
-        if (rookpos > 1) + apieces == (rookpos > 1) ^ apieces {
-            let lftmv = lftmv | (rookpos > 1);
+    let lftmv: u64;
+    let rookshift = rookpos;
+    while (rookshift & &notafile) != 0 {
+        if (rookshift > 1) + apieces == (rookshift > 1) ^ apieces {
+            let lftmv = lftmv | (rookshift > 1);
+            let rookshift = rookshift > 1;
         } else {
             break;
         }
     }
-    let posmov u64 = upmv | dwnmv | rtmv | lftmv;
+    let posmov: u64 = upmv | dwnmv | rtmv | lftmv;
     posmov
+}
+
+pub fn bishmv(bishpos: u64, apieces: u64) -> {
+    let ur: u64;
+
 }
