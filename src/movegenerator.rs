@@ -5,7 +5,7 @@ pub const bbgfile: u64 = 4629771061636907072;
 pub const bbbfile: u64 = 144680345676153346;
 pub const 8rank: u64 = 18374686479671623680;
 pub const 1rank: u64 = 255;
-pub const !1rank: u64 = !1rank;
+pub const not1rank: u64 = !1rank;
 pub const not8rank: u64 = !8rank;
 pub const notafile: u64 = !bbafile;
 pub const nothfile: u64 = !bbhfile;
@@ -13,8 +13,10 @@ pub const bbabfile: u64 = bbafile | bbbfile;
 pub const bbghfile: u64 = bbgfile | bbhfile;
 pub const notabfile: u64 = !bbabfile;
 pub const notghfile: u64 = !bbghfile;
-pub const border: u64 = 1rank | 8rank | bbabfile | bbhfile;
-pub const notborder: u64 = !border;
+pub const notdlborder: u64 = not1rank & notafile;
+pub const notdrborder: u64 = not1rank & nothfile;
+pub const noturborder: u64 = not8rank & nothfile;
+pub const notulborder: u64 = not1rank & nothfile;
 
 pub fn kingmoves(kingpos: u64, ownside: u64) -> u64 {
     let kingpos_clip_file_h = kingpos & &nothfile;
@@ -63,7 +65,7 @@ pub fn wpawnmv (pawnpos: u64, bpieces: u64) -> u64 {
     let wpawn_two_step: u64 = (wpawn_one_step & mask_rank_3) << 8;
     let wpawn_valid = wpawn_one_step | wpawn_two_step; 
     let wpawn_left_attack = (pawnpos & &notafile) << 7;
-    let wpawn_right_attack = (pawnpos & &nothfile) >> 7;
+    let wpawn_right_attack = (pawnpos & &nothfile) << 9;
     let wpawn_attacks = wpawn_left_attack | wpawn_right_attack;
     let wpawn_valid_attacks = wpawn_attacks & bpieces;
     let wpawn_valid = wpawn_valid | wpawn_valid_attacks;
@@ -75,8 +77,8 @@ pub fn bpawnmv (pawnpos: u64, wpieces: u64) -> u64 {
     let bpawn_one_step: u64 = pawnpos >> 8;
     let bpawn_two_step: u64 = (bpawn_one_step & mask_rank_7) >> 8;
     let bpawn_valid = bpawn_one_step | bpawn_two_step;
-    let bpawn_left_attack = (pawnpos & &notafile) >> 7;
-    let bpawn_right_attack = (pawnpos & &nothfile) << 7;
+    let bpawn_left_attack = (pawnpos & &notafile) >> 9;
+    let bpawn_right_attack = (pawnpos & &nothfile) >> 7;
     let bpawn_attacks = bpawn_left_attack | bpawn_right_attack;
     let bpawn_valid_attacks = bpawn_attacks & wpieces;
     let bpawn_valid = bpawn_valid | bpawn_valid_attacks;
@@ -84,20 +86,20 @@ pub fn bpawnmv (pawnpos: u64, wpieces: u64) -> u64 {
 }
 
 pub fn rookmv (rookpos: u64, apieces: u64) -> u64 {
-    let upmv: u64;
+    let upmv: u64 = 0;
     let rookshift: u64 = rookpos;
     while (rookshift & &not8rank)  != 0 {
-        if (rookshift << 8) + apieces == (rookshift << 8) ^ apieces {
+        if (rookshift << 8) ^ apieces != 0 {
             let upmv = upmv | (rookshift << 8);
             let rookshift = rookshift << 8;
         } else {
             break;
         }
     }
-    let dwnmv: u64;
+    let dwnmv: u64 = 0;
     let rookshift: u64 = rookpos;
     while (rookshift & &not1rank) != 0 {
-        if (rookshift >> 8) + apieces == (rookshift >> 8) ^ apieces {
+        if (rookshift >> 8) ^ apieces  != 0{
             let downmv = downmv | (rookshift >> 8);
             let rookshift = rookshift >> 8;
         } else {
@@ -107,19 +109,19 @@ pub fn rookmv (rookpos: u64, apieces: u64) -> u64 {
     let rtmv u64;
     let rookshift: u64 = rookpos;
     while (rookshift & &nothfile) != 0 {
-        if (rookshift < 1) + apieces == (rookshift < 1) ^ apieces {
-            let rtmv  = rtmv | (rookshift < 1); 
-            let rookshift = rookshift < 1;
+        if (rookshift << 1) ^ apieces != 0 {
+            let rtmv  = rtmv | (rookshift << 1); 
+            let rookshift = rookshift << 1;
         } else {
             break;
         }
     }
-    let lftmv: u64;
+    let lftmv: u64 = 0;
     let rookshift = rookpos;
     while (rookshift & &notafile) != 0 {
-        if (rookshift > 1) + apieces == (rookshift > 1) ^ apieces {
-            let lftmv = lftmv | (rookshift > 1);
-            let rookshift = rookshift > 1;
+        if (rookshift >> 1) ^ apieces != 0{
+            let lftmv = lftmv | (rookshift >> 1);
+            let rookshift = rookshift >> 1;
         } else {
             break;
         }
@@ -129,6 +131,47 @@ pub fn rookmv (rookpos: u64, apieces: u64) -> u64 {
 }
 
 pub fn bishmv(bishpos: u64, apieces: u64) -> {
-    let ur: u64;
+    let ur: u64 = 0;
+    let bishshift: u64 = bishpos;
+    while (bishshift & &noturborder) != 0{
+        if (bishshift << 9) ^ apieces != 0 {
+            let ur = ur | (bishshift << 9);
+            let bishshift = bishshift << 9;
+        } else {
+            break;
+        }
+    }
+    let dr: u64 = 0;
+    let bishshift: u64 = bishpos;
+    while (bishshift & &notdrborder) != 0{
+        if (bishshift >> 7) ^ apieces != 0 {
+            let dr = dr | (bishshift >> 7);
+            let bishshift = bishshift >> 7;
+        }else {
+            break;
+        }
+    }
+
+    let dl: u64 = 0;
+    let bishshift: u64 = bishpos;
+    while (bishshift & &notdlborder) != 0{
+        if (bishshift >> 9) ^ apieces != 0 {
+            let dl = dl | (bishshift >> 9);
+            let bishshift = bishshift >> 9;
+        }else {
+            break;
+        }
+    }
+
+    let ul: u64 = 0;
+    let bishshift: u64 = bishpos;
+    while (bishshift & &notulborder) != 0{
+        if (bishshift << 7) ^ apieces != 0 {
+            let ul = ul | (bishshift << 7);
+            let bishshift = bishshift << 7;
+        }else {
+            break;
+        }
+    }
 
 }
