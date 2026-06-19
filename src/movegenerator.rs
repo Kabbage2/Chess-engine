@@ -185,10 +185,6 @@ pub fn queenmv(qnpos: u64, apieces: u64) -> u64{
     posmov
 }
 
-pub fn in_check(fut_pos: u64, cur_pos: u64) -> bool {
-
-}
-
 pub fn make_move(piece_type: str, bb: u64, pos_mov: u64, ) -> u64{
     let mut kcastling_rights = true;
     let mut qcastling_rights = true;
