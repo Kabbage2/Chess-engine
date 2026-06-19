@@ -81,35 +81,35 @@ pub fn bpawnmv (pawnpos: u64, wpieces: u64) -> u64 {
     bpawn_valid
 }
 
-pub fn wrookmv (rookpos: u64, apieces: u64) -> u64 {
+pub fn rookmv (rookpos: u64, apieces: u64) -> u64 {
     let upmv u64;
     while (rookpos & &not8rank)  != 0 {
-        if (rookpos >> 8) + apieces == (rookpos >> 8) ^ apieces {
-            let upmv = upmv | (rookpos >> 8);
+        if (rookpos << 8) + apieces == (rookpos << 8) ^ apieces {
+            let upmv = upmv | (rookpos << 8);
         } else {
             break;
         }
     }
     let dwnmv u64;
     while (rookpos & &not1rank) != 0 {
-        if (rookpos << 8) + apieces == (rookpos << 8) ^ apieces {
-            let downmv = downmv | (rookpos << 8);
+        if (rookpos >> 8) + apieces == (rookpos >> 8) ^ apieces {
+            let downmv = downmv | (rookpos >> 8);
         } else {
             break;
         }
     }
     let rtmv u64;
     while (rookpos & &nothfile) != 0 {
-        if (rookpos > 1) + apieces == (rookpos > 1) ^ apieces {
-            let rtmv  = rtmv | (rookpos > 1); 
+        if (rookpos < 1) + apieces == (rookpos < 1) ^ apieces {
+            let rtmv  = rtmv | (rookpos < 1); 
         } else {
             break;
         }
     }
     let lftmv u64;
     while (rookpos & &notafile) != 0 {
-        if (rookpos < 1) + apieces == (rookpos < 1) ^ apieces {
-            let lftmv = lftmv | (rookpos < 1);
+        if (rookpos > 1) + apieces == (rookpos > 1) ^ apieces {
+            let lftmv = lftmv | (rookpos > 1);
         } else {
             break;
         }
